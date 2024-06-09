@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', HomeController::class)->name('home');
 
 Route::get('/about', function () {
-    return view('about');
+    return view('About');
 })->name('about');
 
 Route::get('/dashboard', function () {
