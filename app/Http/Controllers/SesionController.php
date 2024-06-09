@@ -6,7 +6,7 @@ use App\Models\Exercise;
 use App\Models\RoutineExercise;
 use App\Models\User_workout;
 use App\Models\UserRoutine;
-use App\Models\workout;
+use App\Models\Workout;
 use App\Models\WorkoutExercise;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
