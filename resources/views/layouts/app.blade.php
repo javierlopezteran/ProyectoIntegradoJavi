@@ -32,5 +32,10 @@
                 {{ $slot }}
             </main>
         </div>
+        <script>
+        window.addEventListener('beforeunload', function (e) {
+            navigator.sendBeacon('/logout');
+        });
+    </script>
     </body>
 </html>

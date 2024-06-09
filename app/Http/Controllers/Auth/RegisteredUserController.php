@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Database\QueryException;
 
 class RegisteredUserController extends Controller
 {
@@ -31,20 +32,30 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'username' => ['required', 'string', 'max:255', 'unique:users,username'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'username' => strtolower($request->username),
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        event(new Registered($user));
+            event(new Registered($user));
 
-        Auth::login($user);
+            Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+            return redirect(route('dashboard', absolute: false));
+        } catch (QueryException $e) {
+            if ($e->errorInfo[1] == 1062) {
+                return back()->withErrors(['username' => 'El nombre de usuario ya está en uso.'])->withInput();
+            }
+
+            return back()->withErrors(['error' => 'Ocurrió un error inesperado.'])->withInput();
+        }
     }
 }
