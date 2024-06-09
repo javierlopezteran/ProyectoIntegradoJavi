@@ -3,7 +3,6 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\RutinaController;
 use App\Http\Controllers\SesionController;
 use App\Http\Controllers\UsuariosController;
